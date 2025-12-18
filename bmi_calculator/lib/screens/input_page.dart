@@ -1,8 +1,13 @@
+import 'package:bmi_calculator/screens/result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'icon_content.dart';
-import 'reusable_card.dart';
-import 'constants.dart';
+import '../components/icon_content.dart';
+import '../components/reusable_card.dart';
+import '../constants.dart';
+import 'result_page.dart';
+import '../components/bottom_container.dart';
+import '../components/round_icon_button.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
 
 
 
@@ -21,6 +26,9 @@ class _InputPageState extends State<InputPage> {
 
   Gender? selectedGender;
   int height =180;
+  int weight = 45;
+  int age = 15;
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,25 +120,101 @@ class _InputPageState extends State<InputPage> {
               children: <Widget>[
                 Expanded(child: ReusableCard(
                   colour: kActiveCardColor,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('WEIGHT', style: kLabelTextStyle,),
+                      Text(weight.toString(), style: kNumberTextStyle,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RoundIconButton(
+                            icon: FontAwesomeIcons.minus,
+                            onPressed: (){
+                              setState(() {
+                                weight--;
+                              });
+                            }
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          RoundIconButton(
+                              icon: FontAwesomeIcons.add,
+                              onPressed: (){
+                                setState(() {
+                                  weight++;
+                                });
+                              }
+                          ),
+
+                      ],
+                      )
+                    ],
+                  ),
+
                 )),
                 Expanded(child: ReusableCard(
                   colour: kActiveCardColor,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('AGE', style: kLabelTextStyle,),
+                      Text(age.toString(), style: kNumberTextStyle,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onPressed: (){
+                                setState(() {
+                                  age--;
+                                });
+                              }
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          RoundIconButton(
+                              icon: FontAwesomeIcons.add,
+                              onPressed: (){
+                                setState(() {
+                                  age++;
+
+                                });
+                              }
+                          ),
+
+                        ],
+                      )
+                    ],
+                  ),
+
                 )),
 
               ]
 
           )),
-          Container(
-            color: kBottomContainerColor,
-            margin: EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: kBottomContainerHeight ,
+          BottomContainer(buttonTitle: 'CALCULATE',
+          onTap: (){
+            CalculatorBrain calc = CalculatorBrain(height, weight);
 
-          ),
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ResultsPage(
+                  bmiResult: calc.calculateBMI(),
+                  resultText: calc.getResult(),
+                  interpretation: calc.getInterpretation(),
+                )));
+          },),
         ],
       )
     );
   }
 }
+
+
+
+
+
 
 
